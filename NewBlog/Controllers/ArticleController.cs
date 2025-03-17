@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewBlog.Models;
 
@@ -22,7 +23,7 @@ namespace NewBlog.Controllers
             return await _context.Articles.ToListAsync();
         }
 
-        // Получить статьи определённого автора
+        [Authorize(Roles = "Administrator")]
         [HttpGet("author/{authorId}")]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticlesByAuthor(int Id)
         {

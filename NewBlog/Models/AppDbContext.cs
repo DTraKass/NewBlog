@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace NewBlog.Models
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
     : base(options)
@@ -34,6 +36,24 @@ namespace NewBlog.Models
                 .HasOne(at => at.Tag)
                 .WithMany(t => t.ArticleTags)
                 .HasForeignKey(at => at.TagId);
+
+            modelBuilder.Entity<Role>().HasData(
+                new Role { Id = 1, RoleName = "Administrator" },
+                new Role { Id = 2, RoleName = "Moderator" },
+                new Role { Id = 3, RoleName = "User " }
+                );
+
+            modelBuilder.Entity<User>().HasData(
+                new User { Id = 1, UserName = "admin" },
+                new User { Id = 2, UserName = "moderator" },
+                new User { Id = 3, UserName = "user" }
+                );
+
+            modelBuilder.Entity<UserRole>().HasData(
+                new UserRole { UserId = 1, RoleId = 1 }, // admin
+                new UserRole { UserId = 2, RoleId = 2 }, // moderator
+                new UserRole { UserId = 3, RoleId = 3 }  // user
+                );
         }
     }
 }
